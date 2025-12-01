@@ -2,31 +2,39 @@ import pandas as pd
 import os
 
 #read the file
-def read():
+def read(pathname):
     try:
-        df = pd.read_csv("datas.csv")
+        df = pd.read_csv(pathname)
         return df
     #create new headers if the file is completely empty
     except:
-        df = pd.DataFrame(columns=["date", "salary"])
-        df.to_csv("datas.csv", index=False)
-        df = pd.read_csv("datas.csv")
+        #new headers for the file salary
+        if pathname == "salary.csv":
+            df = pd.DataFrame(columns=["date", "salary"])
+        #new headers for the file expenses
+        elif pathname == "expenses.csv":
+            df = pd.DataFrame(columns=["date", "expense", "category", "description"])
+        else:
+            raise FileNotFoundError
+        df.to_csv(pathname, index=False)
+        save(df, pathname)
         return df
 
 #show the data
-def show():
-    df = read()
+def show(pathname):
+    df = read(pathname)
     if df.empty:
         print("Empty data!")
     else:
         print(df)
 
 #save the file
-def save(df):
-    #sort the data first
-    df.sort_values("date", inplace=True)
+def save(df, pathname, sort=None):
+    #sort the data first (optional)
+    if sort is not None:
+        df.sort_values(sort, inplace=True)
     #save back the data
-    df.to_csv("datas.csv", index=False)
+    df.to_csv(pathname, index=False)
 
 #input salary
 def InputSalary():
@@ -63,12 +71,12 @@ def InputSalary():
             break
         else:
             print("-- error: Salary must be in digits!")
-    df = read()
+    df = read("salary.csv")
     #create dataframe of inputted variables
     newdata = pd.DataFrame([{"date": date, "salary": salary}])
     #merge the old data with new one
     df = pd.concat([df, newdata], ignore_index=False)
-    save(df)
+    save(df, "salary.csv", "date")
     print("Your new salary has succefully inputted!")
 
 
