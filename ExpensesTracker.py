@@ -21,6 +21,13 @@ def show():
     else:
         print(df)
 
+#save the file
+def save(df):
+    #sort the data first
+    df.sort_values("date", inplace=True)
+    #save back the data
+    df.to_csv("datas.csv", index=False)
+
 #input salary
 def InputSalary():
     #input year
@@ -56,13 +63,12 @@ def InputSalary():
             break
         else:
             print("-- error: Salary must be in digits!")
-    #save it to the file
     df = read()
     #create dataframe of inputted variables
     newdata = pd.DataFrame([{"date": date, "salary": salary}])
     #merge the old data with new one
     df = pd.concat([df, newdata], ignore_index=False)
-    df.to_csv("datas.csv", index=False)
+    save(df)
     print("Your new salary has succefully inputted!")
 
 
