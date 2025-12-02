@@ -1,3 +1,7 @@
+import pandas as pd
+from filemanager import read
+from filemanager import show
+from filemanager import save
 
 #input salary
 def InputSalary():
