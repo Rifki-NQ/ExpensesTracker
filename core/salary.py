@@ -1,7 +1,8 @@
 import pandas as pd
-from filemanager import read
-from filemanager import show
-from filemanager import save
+from .filemanager import read
+from .filemanager import show
+from .filemanager import save
+from .filemanager import salarypath, expensespath
 
 #input salary
 def InputSalary():
@@ -38,10 +39,10 @@ def InputSalary():
             break
         else:
             print("-- error: Salary must be in digits!")
-    df = read("salary.csv")
+    df = read(salarypath)
     #create dataframe of inputted variables
     newdata = pd.DataFrame([{"date": date, "salary": salary}])
     #merge the old data with new one
-    df = pd.concat([df, newdata], ignore_index=False)
-    save(df, "salary.csv", "date")
+    df = pd.concat([df, newdata], ignore_index=True)
+    save(df, salarypath, "date")
     print("Your new salary has succefully inputted!")

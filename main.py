@@ -1,4 +1,4 @@
-
+from core.salary import InputSalary
 
 #main menu
 print("Personal expense tracker")

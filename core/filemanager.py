@@ -1,5 +1,9 @@
 import pandas as pd
 
+#variables for data files path
+salarypath = "data/salary.csv"
+expensespath = "data/expenses.csv"
+
 #read the file
 def read(pathname):
     try:
@@ -8,10 +12,10 @@ def read(pathname):
     #create new headers if the file is completely empty
     except:
         #new headers for the file salary
-        if pathname == "salary.csv":
+        if pathname == salarypath:
             df = pd.DataFrame(columns=["date", "salary"])
         #new headers for the file expenses
-        elif pathname == "expenses.csv":
+        elif pathname == expensespath:
             df = pd.DataFrame(columns=["date", "expense", "category", "description"])
         else:
             raise FileNotFoundError
