@@ -19,7 +19,6 @@ def read(pathname):
             df = pd.DataFrame(columns=["date", "expense", "category", "description"])
         else:
             raise FileNotFoundError
-        df.to_csv(pathname, index=False)
         save(df, pathname)
         return df
 
