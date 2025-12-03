@@ -46,3 +46,7 @@ def InputSalary():
     df = pd.concat([df, newdata], ignore_index=True)
     save(df, salarypath, "date")
     print("Your new salary has succefully inputted!")
+
+#Show salary
+def ShowSalary():
+    print(show(salarypath))

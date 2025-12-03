@@ -25,10 +25,11 @@ def read(pathname):
 #show the data
 def show(pathname):
     df = read(pathname)
+    df.index = df.index + 1
     if df.empty:
         print("Empty data!")
     else:
-        print(df)
+        return df
 
 #save the file
 def save(df, pathname, sort=None):
