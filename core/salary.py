@@ -2,7 +2,7 @@ import pandas as pd
 from .filemanager import read
 from .filemanager import show
 from .filemanager import save
-from .filemanager import salarypath, expensespath
+from .filemanager import salarypath
 
 #input salary
 def InputSalary():
