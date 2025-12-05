@@ -25,7 +25,7 @@ def InputExpenses():
             break
         else:
             print("-- error: use digits for expense!")
-    #select category of inputted expense
+    #select category
     print(f"Select expense category")
     #show list of categories with added index
     for index, i in enumerate(categories, start=1):
@@ -39,3 +39,25 @@ def InputExpenses():
             print("-- error: incorrect index inputted!")
         else:
             print("-- error: use digits for the index!")
+    #input descrpition (optional)
+    while True:
+        option = input("Add description? (y/n): ")
+        if option.lower() == "y":
+            description = input("Description: ")
+            break
+        elif option.lower() == "n":
+            description = ""
+            break
+        else:
+            print("-- error: invalid option inputted! (y = yes, n = no)")
+
+    #turns inputted values to dataframe
+    NewExpense = pd.DataFrame([{"date": date, "expense": expense, "category": category, "description": description}])
+    #add old data with new data
+    df = read(expensespath)
+    df = pd.concat([df, NewExpense], ignore_index=True)
+    #format the date to actual date
+    df["date"] = pd.to_datetime(df["date"])
+    #save back to the file
+    save(df, expensespath, "date")
+    print("New expenses has been successfully inputted!")
