@@ -65,9 +65,10 @@ def InputExpenses():
     #add old data with new data
     df = read(expensespath)
     df = pd.concat([df, NewExpense], ignore_index=True)
-    #format all dates to actual date
-    df["date"] = pd.to_datetime(df["date"], dayfirst=True)
+    #format all dates to actual date then sort it
+    df["date"] = pd.to_datetime(df["date"], format="%d-%m-%Y")
+    df = df.sort_values("date")
     df["date"] = df["date"].dt.strftime("%d-%m-%Y")
     #save back to the file
-    save(df, expensespath, "date")
+    save(df, expensespath)
     print("New expenses has been successfully inputted!")
