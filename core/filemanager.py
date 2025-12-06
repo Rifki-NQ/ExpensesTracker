@@ -35,6 +35,6 @@ def show(pathname):
 def save(df, pathname, sort=None):
     #sort the data first (optional)
     if sort is not None:
-        df.sort_values(sort, inplace=True)
+        df = df.sort_values(sort)
     #save back the data
     df.to_csv(pathname, index=False)
