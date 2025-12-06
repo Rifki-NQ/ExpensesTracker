@@ -15,8 +15,7 @@ def InputExpenses():
             date = f"{date[:2]}-{date[2:4]}-{date[4:]}"
             #try to format the inputted date to actual date (for checking only)
             try:
-                actualdate = pd.DataFrame([{"date": date}])
-                actualdate["date"] = pd.to_datetime(actualdate["date"], format="%d-%m-%Y")
+                checkdate = pd.to_datetime(date, format="%d-%m-%Y")
                 break
             #return error if the inputted date is invalid
             except:
