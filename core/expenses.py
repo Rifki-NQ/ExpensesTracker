@@ -13,11 +13,19 @@ def InputExpenses():
         date = input("Enter date (ddmmyyyy): ")
         if date.isdigit() and len(date) == 8:
             date = f"{date[:2]}-{date[2:4]}-{date[4:]}"
-            break
+            #try to format the inputted date to actual date (for checking only)
+            try:
+                actualdate = pd.DataFrame([{"date": date}])
+                actualdate["date"] = pd.to_datetime(actualdate["date"], format="%d-%m-%Y")
+                break
+            #return error if the inputted date is invalid
+            except:
+                print("-- error: invalid date inputted!")
         elif date.isdigit():
             print("-- error: Incorrect date inputted! (e.g. 22062005)")
         else:
             print("-- error: use digits for the date!")
+
     #input expense
     while True:
         expense = input(f"Enter expenses as of {date}: ")
@@ -25,6 +33,7 @@ def InputExpenses():
             break
         else:
             print("-- error: use digits for expense!")
+
     #select category
     print(f"Select expense category")
     #show list of categories with added index
@@ -33,12 +42,12 @@ def InputExpenses():
     while True:
         category = input("Select by index: ")
         if category.isdigit() and 1 <= int(category) <= len(categories):
-            print("success")
             break
         elif category.isdigit():
             print("-- error: incorrect index inputted!")
         else:
             print("-- error: use digits for the index!")
+
     #input descrpition (optional)
     while True:
         option = input("Add description? (y/n): ")
@@ -56,8 +65,9 @@ def InputExpenses():
     #add old data with new data
     df = read(expensespath)
     df = pd.concat([df, NewExpense], ignore_index=True)
-    #format the date to actual date
-    df["date"] = pd.to_datetime(df["date"])
+    #format all dates to actual date
+    df["date"] = pd.to_datetime(df["date"], dayfirst=True)
+    df["date"] = df["date"].dt.strftime("%d-%m-%Y")
     #save back to the file
     save(df, expensespath, "date")
     print("New expenses has been successfully inputted!")
