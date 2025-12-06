@@ -40,6 +40,40 @@ def InputSalary():
     save(df, salarypath)
     print("Your new salary has succefully inputted!")
 
-#Show salary
+#show salary
 def ShowSalary():
     print(show(salarypath))
+
+#edit salary
+def EditSalary():
+    df = read(salarypath)
+    #check if the file is empty
+    if df.empty:
+        print("Empty data to edit!")
+        return
+    ShowSalary()
+    print("Which do you want to edit?")
+    while True:
+        #selecting which row of data to edit
+        index = input(f"Select by index (1 to {len(df)}): ")
+        if index.isdigit() and 1 <= int(index) <= len(df):
+            print("What do you want to edit?")
+            print("1. date\n2. salary")
+            #selecting which column of data to edit
+            while True:
+                index2 = input("Select by index (1 or 2): ")
+                #edit the date
+                if index2.isdigit() and int(index2) == 1:
+                    break
+                #edit the salary
+                elif index2.isdigit() and int(index2) == 2:
+                    break
+                elif index2.isdigit():
+                    print("-- error: invalid inputted index!")
+                else:
+                    print("-- error: use digit for the index!")
+            break
+        elif index.isdigit():
+            print("-- error: invalid inputted index!")
+        else:
+            print("-- error: use digit for the index!")
