@@ -6,32 +6,15 @@ from .filemanager import salarypath
 
 #input salary
 def InputSalary():
-    #input year
+    #input date
     while True:
-        year = input("- Year of your salary (e.g. 2024): ")
-        #check validity of inputted year
-        if year.isdigit():
-            #check length of year, must be 4 long digits
-            if len(year) == 4:
-                break
-            else:
-                print("-- error: invalid year inputted!")
+        date = input("Input date of your salary (MM/YYYY): ")
+        if date.isdigit() and len(date) < 5:
+            break
+        elif date.isdigit():
+            print("-- error: inputted date must be 6 long digits! (e.g. 062005)")
         else:
-            print("-- error: use digits for the year!")
-    #input month
-    while True:
-        month = input("- Month of your salary (1 - 12): ")
-        #check validity of inputted month
-        if month.isdigit():
-            #inputted month must two digits long and in range of 1 to 12
-            if len(month) == 2 and int(month) > 0 and int(month) < 13:
-                break
-            else:
-                print("-- error: invalid month inputted!")
-        else:
-            print("-- error: Use digits for the month! (1 to 12)")
-    #formats the inputted date
-    date = f"{year}-{month}"
+            print("-- error: use digits for the date!")
     #input salary
     while True:
         salary = input("- Input your salary: ")
