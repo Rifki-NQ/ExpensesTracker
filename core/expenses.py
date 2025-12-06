@@ -73,3 +73,7 @@ def InputExpenses():
     #save back to the file
     save(df, expensespath)
     print("New expenses has been successfully inputted!")
+
+#show expenses
+def ShowExpenses():
+    print(show(expensespath))

@@ -1,6 +1,7 @@
 from core.salary import InputSalary
 from core.salary import ShowSalary
 from core.expenses import InputExpenses
+from core.expenses import ShowExpenses
 
 while True:
     #main menu
@@ -37,12 +38,16 @@ while True:
         elif index == 2:
             print("Expenses data menu")
             print("1. Input expenses")
+            print("2. Show expenses")
             while True:
                 index = input("Input by index (q for quit): ")
                 if index.isdigit():
                     index = int(index)
                     if index == 1:
                         InputExpenses()
+                        break
+                    elif index == 2:
+                        ShowExpenses()
                         break
                     else:
                         print("-- error: invalid index inputted!")
