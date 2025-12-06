@@ -9,8 +9,14 @@ def InputSalary():
     #input date
     while True:
         date = input("Input date of your salary (MM/YYYY): ")
-        if date.isdigit() and len(date) < 5:
-            break
+        if date.isdigit() and len(date) < 7:
+            date = f"{date[:2]}-{date[2:]}"
+            #try turning inputted date to actual date format
+            try:
+                date = pd.to_datetime(date, format="%m-%Y")
+                break
+            except:
+                print("-- error: invalid inputted date! (MM/YYYY)")
         elif date.isdigit():
             print("-- error: inputted date must be 6 long digits! (e.g. 062005)")
         else:
@@ -27,6 +33,9 @@ def InputSalary():
     newdata = pd.DataFrame([{"date": date, "salary": salary}])
     #merge the old data with new one
     df = pd.concat([df, newdata], ignore_index=True)
+    #turns all dates to actual date
+    df["date"] = pd.to_datetime(df["date"], format="%m-%Y", dayfirst=True)
+    df["date"] = df["date"].dt.strftime("%m-%Y")
     save(df, salarypath, "date")
     print("Your new salary has succefully inputted!")
 
