@@ -33,10 +33,11 @@ def InputSalary():
     newdata = pd.DataFrame([{"date": date, "salary": salary}])
     #merge the old data with new one
     df = pd.concat([df, newdata], ignore_index=True)
-    #turns all dates to actual date
-    df["date"] = pd.to_datetime(df["date"], format="%m-%Y", dayfirst=True)
+    #turns all dates to actual date then sort it
+    df["date"] = pd.to_datetime(df["date"], format="%m-%Y")
+    df = df.sort_values("date")
     df["date"] = df["date"].dt.strftime("%m-%Y")
-    save(df, salarypath, "date")
+    save(df, salarypath)
     print("Your new salary has succefully inputted!")
 
 #Show salary
