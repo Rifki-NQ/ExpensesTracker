@@ -42,6 +42,7 @@ def InputExpenses():
     while True:
         category = input("Select by index: ")
         if category.isdigit() and 1 <= int(category) <= len(categories):
+            category = categories[int(category) - 1]
             break
         elif category.isdigit():
             print("-- error: incorrect index inputted!")
