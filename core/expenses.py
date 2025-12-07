@@ -2,6 +2,7 @@ import pandas as pd
 from .filemanager import read
 from .filemanager import show
 from .filemanager import save
+from .filemanager import validate_digit
 from .filemanager import expensespath
 
 categories = ["Essentials", "F&B", "Transportation", "Personal", "Saving"]
@@ -85,3 +86,25 @@ def InputExpenses():
 #show expenses
 def ShowExpenses():
     print(show(expensespath))
+
+def EditExpenses():
+    df = read(expensespath)
+    if df.empty:
+        print("Empty data to edit!")
+        return
+    ShowExpenses()
+    #selecting which row of data to be editted
+    print("Which data do you want to edit?")
+    while True:
+        index = input(f"Select by index (1 to {len(df)}): ")
+        if validate_digit(index, 1, len(df)):
+            index = int(index)
+            break
+    #selecting which column of data to be editted
+    print("1. date\n2. expense\n3. category\n4. description")
+    while True:
+        index2 = input("What do you want to edit (1 to 4): ")
+        if validate_digit(index2, 1, 4):
+            index2 = int(index2)
+            break
+    #edit choosen data (index for the row and index2 for the column)
