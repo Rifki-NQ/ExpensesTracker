@@ -77,7 +77,7 @@ def EditSalary():
                                 #sort all dates
                                 df = sort1(df, "date")
                                 save(df, salarypath)
-                                print("new date has been edited successfully!")
+                                print("date has been edited successfully!")
                                 break
                             except:
                                 print("-- error: invalid inputted date! (MM/YYYY)")
@@ -88,7 +88,16 @@ def EditSalary():
                     break
                 #edit the salary
                 elif index2.isdigit() and int(index2) == 2:
-                    break
+                    #validate the inputted salary
+                    while True:
+                        salary = input("Input new salary: ")
+                        if salary.isdigit():
+                            df.loc[int(index) - 1, "salary"] = int(salary)
+                            save(df, salarypath)
+                            print("salary has been edited successfully!")
+                            break
+                        else:
+                            print("-- error: salary must be in digits!")
                 elif index2.isdigit():
                     print("-- error: invalid inputted index!")
                 else:
