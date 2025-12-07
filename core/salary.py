@@ -2,6 +2,7 @@ import pandas as pd
 from .filemanager import read
 from .filemanager import show
 from .filemanager import save
+from .filemanager import sort1
 from .filemanager import salarypath
 
 #input salary
@@ -71,9 +72,11 @@ def EditSalary():
                             date = f"{date[:2]}-{date[2:]}"
                             #try turning inputted date to actual date format
                             try:
-                                date = pd.to_datetime(date, format="%m-%Y")
                                 #change old date to new inputted value
-                                
+                                df.loc[int(index) - 1, "date"] = date
+                                #sort all dates
+                                df = sort1(df, "date")
+                                save(df, salarypath)
                                 print("new date has been edited successfully!")
                                 break
                             except:
