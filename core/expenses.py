@@ -6,9 +6,8 @@ from .filemanager import expensespath
 
 categories = ["Essentials", "F&B", "Transportation", "Personal", "Saving"]
 
-#input new expenses
-def InputExpenses():
-    #input date
+#helper function input date
+def input_date():
     while True:
         date = input("Enter date (ddmmyyyy): ")
         if date.isdigit() and len(date) == 8:
@@ -16,7 +15,7 @@ def InputExpenses():
             #try to format the inputted date to actual date (for checking only)
             try:
                 checkdate = pd.to_datetime(date, format="%d-%m-%Y")
-                break
+                return date
             #return error if the inputted date is invalid
             except:
                 print("-- error: invalid date inputted!")
@@ -25,15 +24,17 @@ def InputExpenses():
         else:
             print("-- error: use digits for the date!")
 
-    #input expense
+#helper function input expense
+def input_expense(date):
     while True:
         expense = input(f"Enter expenses as of {date}: ")
         if expense.isdigit():
-            break
+            return int(expense)
         else:
             print("-- error: use digits for expense!")
 
-    #select category
+#helper function select category
+def select_category():
     print(f"Select expense category")
     #show list of categories with added index
     for index, i in enumerate(categories, start=1):
@@ -42,23 +43,31 @@ def InputExpenses():
         category = input("Select by index: ")
         if category.isdigit() and 1 <= int(category) <= len(categories):
             category = categories[int(category) - 1]
-            break
+            return category
         elif category.isdigit():
             print("-- error: incorrect index inputted!")
         else:
             print("-- error: use digits for the index!")
 
-    #input descrpition (optional)
+#input function descrpition (optional)
+def input_description():
     while True:
         option = input("Add description? (y/n): ")
         if option.lower() == "y":
             description = input("Description: ")
-            break
+            return description
         elif option.lower() == "n":
-            description = ""
-            break
+            return None
         else:
             print("-- error: invalid option inputted! (y = yes, n = no)")
+
+#input new expenses
+def InputExpenses():
+    #input all needed data then turns them into variables
+    date = input_date()
+    expense = input_expense(date)
+    category = select_category()
+    description = input_description()
 
     #turns inputted values to dataframe
     NewExpense = pd.DataFrame([{"date": date, "expense": expense, "category": category, "description": description}])
