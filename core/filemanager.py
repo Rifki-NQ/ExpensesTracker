@@ -52,3 +52,14 @@ def sort2(df, date):
     df = df.sort_values(date)
     df[date] = df[date].dt.strftime("%d-%m-%Y")
     return df
+
+#validation for digit and range of digit
+def validate_digit(value, min_value, max_value):
+    if value.isdigit() and min_value <= int(value) <= max_value:
+        return True
+    elif value.isdigit():
+        print("-- error: invalid inputted index!")
+        return False
+    else:
+        print("-- error: use digit for the index!")
+        return False
