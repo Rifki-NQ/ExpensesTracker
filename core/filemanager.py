@@ -45,3 +45,10 @@ def sort1(df, date):
     df = df.sort_values(date)
     df[date] = df[date].dt.strftime("%m-%Y")
     return df
+
+#date sorting for DD/MM/YYYY
+def sort2(df, date):
+    df[date] = pd.to_datetime(df[date], format="%d-%m-%Y")
+    df = df.sort_values(date)
+    df[date] = df[date].dt.strftime("%d-%m-%Y")
+    return df
