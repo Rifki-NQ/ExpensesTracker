@@ -64,6 +64,24 @@ def EditSalary():
                 index2 = input("Select by index (1 or 2): ")
                 #edit the date
                 if index2.isdigit() and int(index2) == 1:
+                    #validate the inputted date
+                    while True:
+                        date = input("Input new date of your salary (MM/YYYY): ")
+                        if date.isdigit() and len(date) < 7:
+                            date = f"{date[:2]}-{date[2:]}"
+                            #try turning inputted date to actual date format
+                            try:
+                                date = pd.to_datetime(date, format="%m-%Y")
+                                #change old date to new inputted value
+                                
+                                print("new date has been edited successfully!")
+                                break
+                            except:
+                                print("-- error: invalid inputted date! (MM/YYYY)")
+                        elif date.isdigit():
+                            print("-- error: inputted date must be 6 long digits! (e.g. 062005)")
+                        else:
+                            print("-- error: use digits for the date!")
                     break
                 #edit the salary
                 elif index2.isdigit() and int(index2) == 2:
