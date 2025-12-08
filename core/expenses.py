@@ -2,6 +2,7 @@ import pandas as pd
 from .filemanager import read
 from .filemanager import show
 from .filemanager import save
+from .filemanager import sort2
 from .filemanager import validate_digit
 from .filemanager import expensespath
 
@@ -35,8 +36,8 @@ def input_expense(date):
             print("-- error: use digits for expense!")
 
 #helper function select category
-def select_category():
-    print(f"Select expense category")
+def select_category(message="Select expense category"):
+    print(f"{message}")
     #show list of categories with added index
     for index, i in enumerate(categories, start=1):
         print(f"{index}. {i}")
@@ -51,12 +52,20 @@ def select_category():
             print("-- error: use digits for the index!")
 
 #input function descrpition (optional)
-def input_description():
+def input_description(skipOption=False, message="Description: "):
     while True:
-        option = input("Add description? (y/n): ")
+        #skip option for asking y or n
+        if not skipOption:
+            option = input("Add description? (y/n): ")
+        else:
+            option = "y"
         if option.lower() == "y":
-            description = input("Description: ")
-            return description
+            #loop in case user input empty description
+            while True:
+                description = input(f"{message}")
+                if not description == "":
+                    return description
+                print("-- error: description cannot be empty!")
         elif option.lower() == "n":
             return None
         else:
@@ -87,6 +96,7 @@ def InputExpenses():
 def ShowExpenses():
     print(show(expensespath))
 
+#edit expenses
 def EditExpenses():
     df = read(expensespath)
     if df.empty:
@@ -107,4 +117,35 @@ def EditExpenses():
         if validate_digit(index2, 1, 4):
             index2 = int(index2)
             break
-    #edit choosen data (index for the row and index2 for the column)
+    #edit date
+    if index2 == 1:
+        date = input_date()
+        df.loc[index - 1, "date"] = date
+        df = sort2(df, "date")
+        save(df, expensespath)
+        print("date has been edited successfully!")
+    #edit expenses
+    elif index2 == 2:
+        expense = input_expense(df.loc[index - 1, "date"])
+        df.loc[index - 1, "expense"] = expense
+        save(df, expensespath)
+        print("expense has been edited successfully!")
+    #edit category
+    elif index2 == 3:
+        category = select_category("Select new category")
+        df.loc[index - 1, "category"] = category
+        save(df, expensespath)
+        print("category has been edited successfully!")
+    #edit description
+    elif index2 == 4:
+        #case if the description is empty
+        if pd.isna(df.loc[index - 1, "description"]):
+            description = input_description(skipOption=True, message="add description: ")
+            df.loc[index - 1, "description"] = description
+            save(df, expensespath)
+            print("new description has been added successfully!")
+        else:
+            description = input_description(skipOption=True, message="enter new description: ")
+            df.loc[index - 1, "description"] = description
+            save(df, expensespath)
+            print("description has been edited successfully!")
