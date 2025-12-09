@@ -39,19 +39,18 @@ def save(df, pathname, sort=None):
     #save back the data
     df.to_csv(pathname, index=False)
 
-#date sorting for MM/YYYY
-def sort1(df, date):
-    df[date] = pd.to_datetime(df[date], format="%m-%Y")
-    df = df.sort_values(date)
-    df[date] = df[date].dt.strftime("%m-%Y")
-    return df
-
-#date sorting for DD/MM/YYYY
-def sort2(df, date):
-    df[date] = pd.to_datetime(df[date], format="%d-%m-%Y")
-    df = df.sort_values(date)
-    df[date] = df[date].dt.strftime("%d-%m-%Y")
-    return df
+#date sorting based on the format
+def sort(df, date, format):
+    if format == "DD/MM/YYYY":
+        df[date] = pd.to_datetime(df[date], format="%d-%m-%Y")
+        df = df.sort_values(date)
+        df[date] = df[date].dt.strftime("%d-%m-%Y")
+        return df
+    elif format == "MM/YYYY":
+        df[date] = pd.to_datetime(df[date], format="%m-%Y")
+        df = df.sort_values(date)
+        df[date] = df[date].dt.strftime("%m-%Y")
+        return df
 
 #validation for digit and range of digit
 def validate_digit(value, min_value, max_value):

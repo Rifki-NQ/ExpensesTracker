@@ -2,7 +2,7 @@ import pandas as pd
 from .utils import read
 from .utils import show
 from .utils import save
-from .utils import sort2
+from .utils import sort
 from .utils import validate_digit
 from .utils import expensespath
 
@@ -84,10 +84,8 @@ def InputExpenses():
     #add old data with new data
     df = read(expensespath)
     df = pd.concat([df, NewExpense], ignore_index=True)
-    #format all dates to actual date then sort it
-    df["date"] = pd.to_datetime(df["date"], format="%d-%m-%Y")
-    df = df.sort_values("date")
-    df["date"] = df["date"].dt.strftime("%d-%m-%Y")
+    #sort the date
+    df = sort(df, "date", "DD/MM/YYYY")
     #save back to the file
     save(df, expensespath)
     print("New expenses has been successfully inputted!")
@@ -121,7 +119,7 @@ def EditExpenses():
     if index2 == 1:
         date = input_date()
         df.loc[index - 1, "date"] = date
-        df = sort2(df, "date")
+        df = sort(df, "date", "DD/MM/YYYY")
         save(df, expensespath)
         print("date has been edited successfully!")
     #edit expenses

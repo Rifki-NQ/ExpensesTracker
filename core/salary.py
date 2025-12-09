@@ -2,7 +2,7 @@ import pandas as pd
 from .utils import read
 from .utils import show
 from .utils import save
-from .utils import sort1
+from .utils import sort
 from .utils import salarypath
 
 #input salary
@@ -75,7 +75,7 @@ def EditSalary():
                                 #change old date to new inputted value
                                 df.loc[int(index) - 1, "date"] = date
                                 #sort all dates
-                                df = sort1(df, "date")
+                                df = sort(df, "date", "MM/YYYY")
                                 save(df, salarypath)
                                 print("date has been edited successfully!")
                                 break
