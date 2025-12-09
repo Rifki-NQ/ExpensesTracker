@@ -3,41 +3,49 @@ from .utils import read
 from .utils import show
 from .utils import save
 from .utils import sort
+from .utils import validate_digit
 from .utils import salarypath
 
-#input salary
-def InputSalary():
-    #input date
+#helper function input date
+def input_date(message="Input date of your salary (MM/YYYY): "):
     while True:
-        date = input("Input date of your salary (MM/YYYY): ")
+        date = input(message)
         if date.isdigit() and len(date) < 7:
             date = f"{date[:2]}-{date[2:]}"
             #try turning inputted date to actual date format
             try:
                 date = pd.to_datetime(date, format="%m-%Y")
-                break
+                return date
             except:
                 print("-- error: invalid inputted date! (MM/YYYY)")
         elif date.isdigit():
             print("-- error: inputted date must be 6 long digits! (e.g. 062005)")
         else:
             print("-- error: use digits for the date!")
-    #input salary
+
+#helper function input salary
+def input_salary(message="Input your salary: "):
     while True:
-        salary = input("- Input your salary: ")
+        salary = input(message)
         if salary.isdigit():
-            break
+            salary = int(salary)
+            return salary
         else:
             print("-- error: Salary must be in digits!")
+
+#input salary
+def InputSalary():
+    #input all needed data then turns them into variables
+    date = input_date()
+    salary = input_salary()
+
     df = read(salarypath)
     #create dataframe of inputted variables
     newdata = pd.DataFrame([{"date": date, "salary": salary}])
     #merge the old data with new one
     df = pd.concat([df, newdata], ignore_index=True)
-    #turns all dates to actual date then sort it
-    df["date"] = pd.to_datetime(df["date"], format="%m-%Y")
-    df = df.sort_values("date")
-    df["date"] = df["date"].dt.strftime("%m-%Y")
+    #sort the date
+    df = sort(df, "date", "MM/YYYY")
     save(df, salarypath)
     print("Your new salary has succefully inputted!")
 
@@ -53,57 +61,31 @@ def EditSalary():
         print("Empty data to edit!")
         return
     ShowSalary()
+    #selecting which row of data to be editted
     print("Which do you want to edit?")
     while True:
-        #selecting which row of data to edit
-        index = input(f"Select by index (1 to {len(df)}): ")
-        if index.isdigit() and 1 <= int(index) <= len(df):
-            print("What do you want to edit?")
-            print("1. date\n2. salary")
-            #selecting which column of data to edit
-            while True:
-                index2 = input("Select by index (1 or 2): ")
-                #edit the date
-                if index2.isdigit() and int(index2) == 1:
-                    #validate the inputted date
-                    while True:
-                        date = input("Input new date of your salary (MM/YYYY): ")
-                        if date.isdigit() and len(date) < 7:
-                            date = f"{date[:2]}-{date[2:]}"
-                            #try turning inputted date to actual date format
-                            try:
-                                #change old date to new inputted value
-                                df.loc[int(index) - 1, "date"] = date
-                                #sort all dates
-                                df = sort(df, "date", "MM/YYYY")
-                                save(df, salarypath)
-                                print("date has been edited successfully!")
-                                break
-                            except:
-                                print("-- error: invalid inputted date! (MM/YYYY)")
-                        elif date.isdigit():
-                            print("-- error: inputted date must be 6 long digits! (e.g. 062005)")
-                        else:
-                            print("-- error: use digits for the date!")
-                    break
-                #edit the salary
-                elif index2.isdigit() and int(index2) == 2:
-                    #validate the inputted salary
-                    while True:
-                        salary = input("Input new salary: ")
-                        if salary.isdigit():
-                            df.loc[int(index) - 1, "salary"] = int(salary)
-                            save(df, salarypath)
-                            print("salary has been edited successfully!")
-                            break
-                        else:
-                            print("-- error: salary must be in digits!")
-                elif index2.isdigit():
-                    print("-- error: invalid inputted index!")
-                else:
-                    print("-- error: use digit for the index!")
+        rowIndex = input(f"Select by index (1 to {len(df)}): ")
+        if validate_digit(rowIndex, 1, len(df)):
+            rowIndex = int(rowIndex)
             break
-        elif index.isdigit():
-            print("-- error: invalid inputted index!")
-        else:
-            print("-- error: use digit for the index!")
+    #selecting which column of data to be editted
+    print("1. Date\n2. Salary")
+    print("What do you want to edit?")
+    while True:
+        columnIndex = input("Select by index (1 or 2): ")
+        if validate_digit(columnIndex, 1, 2):
+            columnIndex = int(columnIndex)
+            break
+    #edit date
+    if columnIndex == 1:
+        date = input_date("Input new date of your salary (MM/YYYY): " )
+        df.loc[rowIndex - 1, "date"] = date
+        df = sort(df, "date", "MM/YYYY")
+        save(df, salarypath)
+        print("date has been edited successfully!")
+    #edit salary
+    elif columnIndex == 2:
+        salary = input_salary("Input your new salary: ")
+        df.loc[rowIndex - 1, "salary"] = salary
+        save(df, salarypath)
+        print("salary has been edited successfully!")
