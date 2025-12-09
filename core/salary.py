@@ -1,9 +1,9 @@
 import pandas as pd
-from .filemanager import read
-from .filemanager import show
-from .filemanager import save
-from .filemanager import sort1
-from .filemanager import salarypath
+from .utils import read
+from .utils import show
+from .utils import save
+from .utils import sort1
+from .utils import salarypath
 
 #input salary
 def InputSalary():
