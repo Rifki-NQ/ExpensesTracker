@@ -147,3 +147,18 @@ def EditExpenses():
             df.loc[index - 1, "description"] = description
             save(df, expensespath)
             print("description has been edited successfully!")
+
+#delete expense
+def DeleteExpenses():
+    df = read(expensespath)
+    print(show(expensespath))
+    print("Which do you want to delete?")
+    while True:
+        rowIndex = input(f"Select by index (1 to {len(df)}): ")
+        if validate_digit(rowIndex, 1, len(df)):
+            rowIndex = int(rowIndex)
+            break
+    #delete selected row
+    df = df.drop(rowIndex - 1)
+    save(df, expensespath)
+    print("Deleted successfully!")
