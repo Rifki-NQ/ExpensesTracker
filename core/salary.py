@@ -89,3 +89,18 @@ def EditSalary():
         df.loc[rowIndex - 1, "salary"] = salary
         save(df, salarypath)
         print("salary has been edited successfully!")
+
+#delete salary
+def DeleteSalary():
+    df = read(salarypath)
+    print(show(salarypath))
+    print("Which do you want to delete?")
+    while True:
+        rowIndex = input(f"Select by index (1 to {len(df)}): ")
+        if validate_digit(rowIndex, 1, len(df)):
+            rowIndex = int(rowIndex)
+            break
+    #delete selected row
+    df = df.drop(rowIndex - 1)
+    save(df, salarypath)
+    print("Deleted successfully!")
