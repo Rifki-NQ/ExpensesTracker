@@ -3,23 +3,35 @@ import pandas as pd
 #variables for data files path
 salarypath = "data/salary.csv"
 expensespath = "data/expenses.csv"
+#lists for headers of each data files
+salary_headers = ["date", "salary"]
+expenses_headers = ["date", "expense", "category", "description"]
 
 #read the file
 def read(pathname):
+    #check if the file exist
     try:
         df = pd.read_csv(pathname)
-        return df
-    #create new headers if the file is completely empty
-    except:
-        #new headers for the file salary
+    #create new file with headers if the file does not exist
+    except FileNotFoundError:
         if pathname == salarypath:
-            df = pd.DataFrame(columns=["date", "salary"])
-        #new headers for the file expenses
+            df = pd.DataFrame(columns=salary_headers)
         elif pathname == expensespath:
-            df = pd.DataFrame(columns=["date", "expense", "category", "description"])
-        else:
-            raise FileNotFoundError
+            df = pd.DataFrame(columns=expenses_headers)
         save(df, pathname)
+        return df
+    #check if the headers are valid
+    if pathname == salarypath and df.columns.tolist() == salary_headers:
+        return df
+    elif pathname == expensespath and df.columns.tolist() == expenses_headers:
+        return df
+    elif pathname == salarypath:
+        df = pd.DataFrame(columns=salary_headers)
+        save(df, salarypath)
+        return df
+    elif pathname == expensespath:
+        df = pd.DataFrame(columns=expenses_headers)
+        save(df, expensespath)
         return df
 
 #show the data
