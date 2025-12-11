@@ -104,3 +104,17 @@ def DeleteSalary():
     df = df.drop(rowIndex - 1)
     save(df, salarypath)
     print("Deleted successfully!")
+
+#reset salary
+def ResetSalary():
+    while True:
+        option = input("Are you sure? (y/n): ")
+        if option.lower() == "y":
+            df = pd.DataFrame(columns=["date", "salary"])
+            save(df, salarypath)
+            print("Salary resetted!")
+            break
+        elif option.lower() == "n":
+            break
+        else:
+            print("-- error: invalid option inputted! (y = yes, n = no)")
