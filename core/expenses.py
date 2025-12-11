@@ -162,3 +162,17 @@ def DeleteExpenses():
     df = df.drop(rowIndex - 1)
     save(df, expensespath)
     print("Deleted successfully!")
+
+#reset expense
+def ResetExpenses():
+    while True:
+        option = input("Are you sure? (y/n): ")
+        if option.lower() == "y":
+            df = pd.DataFrame(columns=["date", "expense", "category", "description"])
+            save(df, expensespath)
+            print("Expenses resetted!")
+            break
+        elif option.lower() == "n":
+            break
+        else:
+            print("-- error: invalid option inputted! (y = yes, n = no)")

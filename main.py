@@ -7,6 +7,7 @@ from core.expenses import InputExpenses
 from core.expenses import ShowExpenses
 from core.expenses import EditExpenses
 from core.expenses import DeleteExpenses
+from core.expenses import ResetExpenses
 
 while True:
     #main menu
@@ -58,6 +59,7 @@ while True:
             print("2. Show expenses")
             print("3. Edit expense")
             print("4. Delete expense")
+            print("5. Reset expenses")
             while True:
                 index = input("Input by index (q for quit): ")
                 if index.isdigit():
@@ -73,6 +75,9 @@ while True:
                         break
                     elif index == 4:
                         DeleteExpenses()
+                        break
+                    elif index == 5:
+                        ResetExpenses()
                         break
                     else:
                         print("-- error: invalid index inputted!")
