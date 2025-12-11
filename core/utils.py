@@ -29,7 +29,7 @@ def show(pathname):
     if df.empty:
         print("Empty data!")
     else:
-        return df
+        print(df)
 
 #save the file
 def save(df, pathname, sort=None):

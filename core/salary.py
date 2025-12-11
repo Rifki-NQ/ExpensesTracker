@@ -51,7 +51,7 @@ def InputSalary():
 
 #show salary
 def ShowSalary():
-    print(show(salarypath))
+    show(salarypath)
 
 #edit salary
 def EditSalary():

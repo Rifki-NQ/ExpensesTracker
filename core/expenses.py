@@ -92,7 +92,7 @@ def InputExpenses():
 
 #show expenses
 def ShowExpenses():
-    print(show(expensespath))
+    show(expensespath)
 
 #edit expenses
 def EditExpenses():
