@@ -93,7 +93,7 @@ def EditSalary():
 #delete salary
 def DeleteSalary():
     df = read(salarypath)
-    print(show(salarypath))
+    ShowSalary()
     print("Which do you want to delete?")
     while True:
         rowIndex = input(f"Select by index (1 to {len(df)}): ")

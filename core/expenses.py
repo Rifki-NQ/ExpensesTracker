@@ -151,7 +151,7 @@ def EditExpenses():
 #delete expense
 def DeleteExpenses():
     df = read(expensespath)
-    print(show(expensespath))
+    ShowExpenses()
     print("Which do you want to delete?")
     while True:
         rowIndex = input(f"Select by index (1 to {len(df)}): ")
