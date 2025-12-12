@@ -151,6 +151,9 @@ def EditExpenses():
 #delete expense
 def DeleteExpenses():
     df = read(expensespath)
+    if df.empty:
+        print("Empty data to delete!")
+        return
     ShowExpenses()
     print("Which do you want to delete?")
     while True:
@@ -165,6 +168,10 @@ def DeleteExpenses():
 
 #reset expense
 def ResetExpenses():
+    df = read(expensespath)
+    if df.empty:
+        print("Empty data to reset!")
+        return
     while True:
         option = input("Are you sure? (y/n): ")
         if option.lower() == "y":
