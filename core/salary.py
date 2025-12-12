@@ -56,7 +56,6 @@ def ShowSalary():
 #edit salary
 def EditSalary():
     df = read(salarypath)
-    #check if the file is empty
     if df.empty:
         print("Empty data to edit!")
         return
@@ -93,6 +92,9 @@ def EditSalary():
 #delete salary
 def DeleteSalary():
     df = read(salarypath)
+    if df.empty:
+        print("Empty data to delete!")
+        return
     ShowSalary()
     print("Which do you want to delete?")
     while True:
@@ -107,6 +109,10 @@ def DeleteSalary():
 
 #reset salary
 def ResetSalary():
+    df = read(salarypath)
+    if df.empty:
+        print("Empty data to reset!")
+        return
     while True:
         option = input("Are you sure? (y/n): ")
         if option.lower() == "y":
