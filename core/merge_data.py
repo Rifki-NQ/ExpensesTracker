@@ -5,12 +5,11 @@ from .utils import expensespath
 
 df_salary = read(salarypath)
 df_expenses = read(expensespath)
-df_expenses.reset_index
 #turns all dates to datetime
 df_salary["date"] = pd.to_datetime(df_salary["date"], format="%m-%Y")
 df_expenses["date"] = pd.to_datetime(df_expenses["date"], format="%d-%m-%Y")
 
-def show_monthly_expenses():
+def monthly_expenses():
     if df_expenses.empty:
         print("Empty expenses data!")
         return
@@ -27,5 +26,18 @@ def show_monthly_expenses():
     #reset the index
     monthly_expenses.reset_index(drop=True, inplace=True)
     monthly_expenses.index = monthly_expenses.index + 1
-    #print the result
-    print(monthly_expenses)
+    return monthly_expenses
+
+def monthly_expenses_and_salary():
+    expenses = monthly_expenses()
+    expenses_and_salary = pd.DataFrame(columns=["date", "monthly expenses", "salary", "balance"])
+    #copy the values from monthly expenses
+    expenses_and_salary[["date", "monthly expenses"]] = expenses[["date", "Total expenses"]]
+    #process the salary
+    salary = df_salary
+    salary["date"] = pd.to_datetime(salary["date"], format="%m-%Y")
+    salary["date"] = salary["date"].dt.strftime("%B %Y")
+    expenses_and_salary = pd.merge(expenses_and_salary, salary, on="salary", how="inner")
+    print(salary)
+
+    return expenses_and_salary

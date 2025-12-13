@@ -8,7 +8,8 @@ from core.expenses import ShowExpenses
 from core.expenses import EditExpenses
 from core.expenses import DeleteExpenses
 from core.expenses import ResetExpenses
-from core.merge_data import show_monthly_expenses
+from core.merge_data import monthly_expenses
+from core.merge_data import monthly_expenses_and_salary
 
 while True:
     #main menu
@@ -90,13 +91,16 @@ while True:
         #sub menu for data analyzing
         elif index == 3:
             print("1. Shows expenses by month")
+            print("2. Shows expenses for each month of salary")
             while True:
                 index = input("Input by index (q for quit): ")
                 if index.isdigit():
                     index = int(index)
                     if index == 1:
-                        show_monthly_expenses()
+                        print(monthly_expenses())
                         break
+                    elif index == 2:
+                        print(monthly_expenses_and_salary())
                     else:
                         print("-- error: invalid index inputted!")
                 elif index.lower() == "q":
