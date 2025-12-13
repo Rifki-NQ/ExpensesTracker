@@ -5,6 +5,7 @@ from .utils import expensespath
 
 df_salary = read(salarypath)
 df_expenses = read(expensespath)
+df_expenses.reset_index
 #turns all dates to datetime
 df_salary["date"] = pd.to_datetime(df_salary["date"], format="%m-%Y")
 df_expenses["date"] = pd.to_datetime(df_expenses["date"], format="%d-%m-%Y")
@@ -23,5 +24,8 @@ def show_monthly_expenses():
     monthly_expenses["date"] = pd.to_datetime(monthly_expenses["date"], format="%B %Y")
     monthly_expenses = monthly_expenses.sort_values("date")
     monthly_expenses ["date"]= monthly_expenses["date"].dt.strftime("%B %Y")
-
+    #reset the index
+    monthly_expenses.reset_index(drop=True, inplace=True)
+    monthly_expenses.index = monthly_expenses.index + 1
+    #print the result
     print(monthly_expenses)
