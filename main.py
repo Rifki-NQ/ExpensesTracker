@@ -8,6 +8,7 @@ from core.expenses import ShowExpenses
 from core.expenses import EditExpenses
 from core.expenses import DeleteExpenses
 from core.expenses import ResetExpenses
+from core.merge_data import show_monthly_expenses
 
 while True:
     #main menu
@@ -15,6 +16,7 @@ while True:
     print("Personal expense tracker")
     print("1. Salary menu")
     print("2. Expenses menu")
+    print("3. Data menu")
     index = input("Input by index (q for quit): ")
     if index.isdigit():
         index = int(index)
@@ -78,6 +80,22 @@ while True:
                         break
                     elif index == 5:
                         ResetExpenses()
+                        break
+                    else:
+                        print("-- error: invalid index inputted!")
+                elif index.lower() == "q":
+                    break
+                else:
+                    print("-- error: use digits for the index!")
+        #sub menu for data analyzing
+        elif index == 3:
+            print("1. Shows expenses by month")
+            while True:
+                index = input("Input by index (q for quit): ")
+                if index.isdigit():
+                    index = int(index)
+                    if index == 1:
+                        show_monthly_expenses()
                         break
                     else:
                         print("-- error: invalid index inputted!")
