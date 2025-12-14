@@ -47,3 +47,13 @@ def monthly_expenses_and_salary():
     expenses_and_salary[["monthly expenses", "salary", "net balance"]] = expenses_and_salary[["monthly expenses", "salary", "net balance"]].astype("int64")
     expenses_and_salary.index = expenses_and_salary.index + 1
     return expenses_and_salary
+
+def expenses_by_category():
+    if df_expenses.empty:
+        return "Empty expenses data!"
+    expenses_category= df_expenses
+    expenses_category = expenses_category.groupby("category", as_index=False).agg(
+        count=("category", "size"),
+        total_expenses=("expense", "sum")
+    )
+    return expenses_category

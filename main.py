@@ -10,6 +10,7 @@ from core.expenses import DeleteExpenses
 from core.expenses import ResetExpenses
 from core.merge_data import monthly_expenses
 from core.merge_data import monthly_expenses_and_salary
+from core.merge_data import expenses_by_category
 
 while True:
     #main menu
@@ -90,8 +91,9 @@ while True:
                     print("-- error: use digits for the index!")
         #sub menu for data analyzing
         elif index == 3:
-            print("1. Shows expenses by month")
-            print("2. Shows expenses for each month of salary")
+            print("1. Show expenses by month")
+            print("2. Show expenses for each month of salary")
+            print("3. Show expenses percentage by category")
             while True:
                 index = input("Input by index (q for quit): ")
                 if index.isdigit():
@@ -101,6 +103,9 @@ while True:
                         break
                     elif index == 2:
                         print(monthly_expenses_and_salary())
+                        break
+                    elif index == 3:
+                        print(expenses_by_category())
                         break
                     else:
                         print("-- error: invalid index inputted!")
