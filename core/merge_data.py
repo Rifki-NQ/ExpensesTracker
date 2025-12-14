@@ -12,19 +12,13 @@ df_expenses["date"] = pd.to_datetime(df_expenses["date"], format="%d-%m-%Y")
 def monthly_expenses():
     if df_expenses.empty:
         return "Empty expenses data!"
-    monthly_expenses = pd.DataFrame(columns=["date", "Total expenses"])
-    #add values from expenses data
-    monthly_expenses["date"] = df_expenses["date"].dt.strftime("%B %Y")
-    monthly_expenses["Total expenses"] = df_expenses["expense"]
-    #group by duplicated month then sum the expenses
-    monthly_expenses = monthly_expenses.groupby("date", as_index=False)["Total expenses"].sum()
-    #sort the date
-    monthly_expenses["date"] = pd.to_datetime(monthly_expenses["date"], format="%B %Y")
-    monthly_expenses = monthly_expenses.sort_values("date")
-    monthly_expenses ["date"]= monthly_expenses["date"].dt.strftime("%B %Y")
-    #reset the index
-    monthly_expenses.reset_index(drop=True, inplace=True)
-    monthly_expenses.index = monthly_expenses.index + 1
+    monthly_expenses = df_expenses[["date", "expense"]].copy()
+    monthly_expenses["date"] = pd.to_datetime(monthly_expenses["date"], format="%d-%m-%Y")
+    monthly_expenses["date"] = monthly_expenses["date"].dt.to_period("M")
+    monthly_expenses = monthly_expenses.groupby("date", sort=True,as_index=False)["expense"].sum().sort_values("date")
+    #format the date then reset the index
+    monthly_expenses["date"] = pd.to_datetime(monthly_expenses["date"], format="%Y-%m")
+    monthly_expenses["date"] = monthly_expenses["date"].dt.strftime("%B %Y")
     return monthly_expenses
 
 def monthly_expenses_and_salary():
