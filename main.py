@@ -101,6 +101,7 @@ while True:
                         break
                     elif index == 2:
                         print(monthly_expenses_and_salary())
+                        break
                     else:
                         print("-- error: invalid index inputted!")
                 elif index.lower() == "q":
