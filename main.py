@@ -93,7 +93,7 @@ while True:
         elif index == 3:
             print("1. Show expenses by month")
             print("2. Show expenses for each month of salary")
-            print("3. Show expenses percentage by category")
+            print("3. Show category percentage")
             while True:
                 index = input("Input by index (q for quit): ")
                 if index.isdigit():
