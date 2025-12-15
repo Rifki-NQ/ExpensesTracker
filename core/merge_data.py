@@ -17,8 +17,9 @@ def monthly_expenses():
     monthly_expenses["date"] = monthly_expenses["date"].dt.to_period("M")
     monthly_expenses = monthly_expenses.groupby("date", sort=True,as_index=False)["expense"].sum().sort_values("date")
     #format the date then reset the index
-    monthly_expenses["date"] = pd.to_datetime(monthly_expenses["date"], format="%Y-%m")
+    monthly_expenses["date"] = monthly_expenses["date"].dt.to_timestamp()
     monthly_expenses["date"] = monthly_expenses["date"].dt.strftime("%B %Y")
+    monthly_expenses.index = monthly_expenses.index + 1
     return monthly_expenses
 
 def monthly_expenses_and_salary():
