@@ -45,20 +45,18 @@ def expenses_by_category():
     if df_expenses.empty:
         return "Empty expenses data!"
     expenses_category = df_expenses
-    expenses_category.rename(columns={"expense": "category expenses"}, inplace=True)
-    #create category percentage
-    percentage = expenses_category.groupby("category", as_index=False).size()
-    percentage["size"] = percentage["size"] / percentage["size"].sum() * 100
-    percentage["size"] = percentage["size"].round(1)
-    #group by category then add all the values
-    expenses_category = expenses_category.groupby("category", as_index=False)["category expenses"].sum()
-    expenses_category.insert(1, "category percentage", percentage["size"])
-    #add total category column
-    total_category = df_expenses.groupby("category", as_index=False).size()
-    expenses_category.insert(1, "total category", total_category["size"])
-    #sort by highest category percentage then reset the index
-    expenses_category = expenses_category.sort_values("category percentage", ascending=False)
-    expenses_category["category percentage"] = expenses_category["category percentage"].astype(str) + "%"
+    expenses_category = expenses_category.groupby("category", as_index=False).agg(
+        total_category=("category", "size"),
+        category_expenses=("expense", "sum")
+    )
+    #creates percentage of category then add it to main dataframe
+    category_percentage = df_expenses.groupby("category", as_index=False).size()
+    category_percentage["size"] = category_percentage["size"] / category_percentage["size"].sum() * 100
+    category_percentage["size"] = category_percentage["size"].round(1)
+    expenses_category.insert(2, "category_percentage", category_percentage["size"])
+    #sort by highest category percentage then format it
+    expenses_category = expenses_category.sort_values("category_percentage", ascending=False)
+    expenses_category["category_percentage"] = expenses_category["category_percentage"].astype(str) + "%"
     expenses_category.reset_index(drop=True, inplace=True)
     expenses_category.index = expenses_category.index + 1
     return expenses_category

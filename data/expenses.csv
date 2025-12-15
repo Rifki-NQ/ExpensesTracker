@@ -1,10 +1,101 @@
 date,expense,category,description
-10-10-2020,9090,Essentials,ban belakang kempes
-11-11-2021,800000,Essentials,oioioi
-12-11-2021,30,Essentials,
-21-09-2025,900000,Personal,
-17-10-2025,110000,Personal,birthday gift
-10-12-2025,90000,Personal,
-14-12-2025,150000,Personal,date with a girl
-21-12-2025,200000,Transportation,traveling
-22-12-2025,150000,Personal,meal with a girl
+12-03-2020,120000,Essentials,Electricity
+05-11-2021,45000,F&B,Lunch
+27-06-2023,30000,Transportation,
+14-01-2024,90000,Personal,Skincare
+02-09-2022,200000,Saving,
+19-07-2020,140000,Essentials,Groceries
+08-12-2024,60000,F&B,Dinner
+21-02-2021,35000,Transportation,Bus fare
+30-05-2023,75000,Personal,
+11-10-2020,250000,Saving,Emergency fund
+04-04-2025,155000,Essentials,Internet
+18-08-2022,52000,F&B,
+09-09-2021,28000,Transportation,
+22-06-2024,100000,Personal,Clothes
+03-01-2023,300000,Saving,
+15-02-2020,130000,Essentials,Water bill
+07-07-2021,48000,F&B,Lunch
+29-03-2025,42000,Transportation,Taxi
+16-11-2022,85000,Personal,
+01-08-2024,220000,Saving,Investment
+10-10-2020,150000,Essentials,Electricity
+25-12-2023,65000,F&B,Dinner
+06-06-2021,30000,Transportation,
+19-04-2025,95000,Personal,Subscription
+28-02-2022,200000,Saving,
+09-01-2024,160000,Essentials,Groceries
+14-07-2020,55000,F&B,
+20-05-2023,37000,Transportation,Train
+03-09-2021,78000,Personal,
+11-11-2024,260000,Saving,
+05-03-2022,145000,Essentials,Gas
+17-08-2023,50000,F&B,Lunch
+24-12-2020,33000,Transportation,
+02-06-2024,90000,Personal,
+30-10-2021,210000,Saving,
+13-04-2025,170000,Essentials,Groceries
+26-01-2020,60000,F&B,
+18-09-2022,40000,Transportation,
+07-07-2024,110000,Personal,Clothes
+22-02-2023,300000,Saving,Emergency fund
+04-05-2021,135000,Essentials,Internet
+29-11-2020,52000,F&B,Dinner
+15-03-2025,36000,Transportation,
+08-08-2022,88000,Personal,
+12-12-2024,250000,Saving,
+01-06-2023,150000,Essentials,Electricity
+19-01-2021,45000,F&B,
+27-10-2020,31000,Transportation,Bus fare
+14-04-2024,92000,Personal,
+05-09-2022,200000,Saving,
+23-07-2025,165000,Essentials,Groceries
+09-02-2023,58000,F&B,Lunch
+30-08-2021,34000,Transportation,
+11-11-2020,99000,Personal,Skincare
+02-03-2024,270000,Saving,Investment
+18-06-2022,140000,Essentials,Water bill
+07-01-2025,61000,F&B,Dinner
+21-05-2020,39000,Transportation,
+16-10-2023,85000,Personal,
+28-12-2021,200000,Saving,
+10-04-2024,155000,Essentials,Groceries
+04-08-2020,50000,F&B,
+19-02-2022,32000,Transportation,
+25-06-2025,100000,Personal,Subscription
+08-09-2023,300000,Saving,Emergency fund
+12-01-2021,130000,Essentials,Gas
+27-07-2024,59000,F&B,Lunch
+15-03-2020,35000,Transportation,
+06-11-2022,78000,Personal,
+20-05-2025,220000,Saving,
+03-10-2023,160000,Essentials,Internet
+17-12-2021,64000,F&B,Dinner
+29-04-2020,30000,Transportation,
+09-08-2024,92000,Personal,
+14-02-2023,260000,Saving,Investment
+01-07-2025,150000,Essentials,Electricity
+18-01-2022,55000,F&B,
+22-09-2020,28000,Transportation,
+30-06-2024,105000,Personal,Clothes
+11-11-2021,200000,Saving,
+05-05-2023,145000,Essentials,Groceries
+24-12-2024,70000,F&B,Dinner
+19-02-2022,32000,Transportation,
+25-06-2025,100000,Personal,Subscription
+08-09-2023,300000,Saving,Emergency fund
+12-01-2021,130000,Essentials,Gas
+27-07-2024,59000,F&B,Lunch
+15-03-2020,35000,Transportation,
+06-11-2022,78000,Personal,
+20-05-2025,220000,Saving,
+03-10-2023,160000,Essentials,Internet
+17-12-2021,64000,F&B,Dinner
+29-04-2020,30000,Transportation,
+09-08-2024,92000,Personal,
+14-02-2023,260000,Saving,Investment
+01-07-2025,150000,Essentials,Electricity
+18-01-2022,55000,F&B,
+22-09-2020,28000,Transportation,
+19-07-2020,140000,Essentials,Groceries
+15-03-2020,35000,Transportation,
