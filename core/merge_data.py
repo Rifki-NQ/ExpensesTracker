@@ -28,18 +28,16 @@ def monthly_expenses_and_salary():
     elif df_expenses.empty:
         return "Empty expenses data!"
     expenses = monthly_expenses()
-    expenses_and_salary = pd.DataFrame(columns=["date", "monthly expenses"])
-    #copy the values from monthly expenses
-    expenses_and_salary[["date", "monthly expenses"]] = expenses[["date", "Total expenses"]]
-    #change salary date format to be the same as expenses_and_salary then merge it
-    df_salary["date"] = pd.to_datetime(df_salary["date"], format="%m-%Y")
-    df_salary["date"] = df_salary["date"].dt.strftime("%B %Y")
-    expenses_and_salary = expenses_and_salary.merge(df_salary, on="date", how="left")
+    salary = df_salary[["date", "salary"]].copy()
+    #format salary date
+    salary["date"] = pd.to_datetime(salary["date"], format="%m-%Y")
+    salary["date"] = salary["date"].dt.strftime("%B %Y")
+    #merge the expenses and salary
+    expenses_and_salary = expenses.merge(salary, on="date", how="left")
     expenses_and_salary = expenses_and_salary.fillna(0)
-    #add net balance (salary - expenses)
-    expenses_and_salary["net balance"] = expenses_and_salary["salary"] - expenses_and_salary["monthly expenses"]
-    #convert all float into int
-    expenses_and_salary[["monthly expenses", "salary", "net balance"]] = expenses_and_salary[["monthly expenses", "salary", "net balance"]].astype("int64")
+    #add net balance
+    expenses_and_salary["net balance"] = expenses_and_salary["salary"] - expenses_and_salary["expense"]
+    expenses_and_salary[["expense" ,"salary", "net balance"]] = expenses_and_salary[["expense" ,"salary", "net balance"]].astype("int64")
     expenses_and_salary.index = expenses_and_salary.index + 1
     return expenses_and_salary
 
