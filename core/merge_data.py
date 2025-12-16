@@ -60,3 +60,23 @@ def expenses_by_category():
     expenses_category.reset_index(drop=True, inplace=True)
     expenses_category.index = expenses_category.index + 1
     return expenses_category
+
+def yearly_summary():
+    if df_salary.empty:
+        return "Empty salary data!"
+    elif df_expenses.empty:
+        return "Empty expenses data!"
+    expenses = df_expenses[["date", "expense"]].rename(columns={"date": "year", "expense": "yearly_expenses"}).copy()
+    salary = df_salary.rename(columns={"date": "year", "salary": "yearly_salary"}).copy()
+    #format date of both datasets
+    expenses["year"] = pd.to_datetime(expenses["year"], format="%d-%m-%Y")
+    salary["year"] = pd.to_datetime(salary["year"], format="%m-%Y")
+    expenses["year"] = expenses["year"].dt.strftime("%Y")
+    salary["year"] = salary["year"].dt.strftime("%Y")
+    #group by year
+    expenses = expenses.groupby("year", as_index=False)["yearly_expenses"].sum()
+    salary = salary.groupby("year", as_index=False)["yearly_salary"].sum()
+    #merge by year
+    summary = pd.merge(expenses, salary, on="year", how="outer")
+    summary.index = summary.index + 1
+    return summary

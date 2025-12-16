@@ -11,6 +11,7 @@ from core.expenses import ResetExpenses
 from core.merge_data import monthly_expenses
 from core.merge_data import monthly_expenses_and_salary
 from core.merge_data import expenses_by_category
+from core.merge_data import yearly_summary
 
 while True:
     #main menu
@@ -94,6 +95,7 @@ while True:
             print("1. Show expenses by month")
             print("2. Show expenses for each month of salary")
             print("3. Show category percentage")
+            print("4. show yearly summary")
             while True:
                 index = input("Input by index (q for quit): ")
                 if index.isdigit():
@@ -106,6 +108,9 @@ while True:
                         break
                     elif index == 3:
                         print(expenses_by_category())
+                        break
+                    elif index == 4:
+                        print(yearly_summary())
                         break
                     else:
                         print("-- error: invalid index inputted!")
