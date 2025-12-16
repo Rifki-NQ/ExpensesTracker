@@ -93,8 +93,8 @@ while True:
         #sub menu for data analyzing
         elif index == 3:
             print("1. Show expenses by month")
-            print("2. Show expenses for each month of salary")
-            print("3. Show category percentage")
+            print("2. Show net balance by month")
+            print("3. Show expenses by category")
             print("4. show yearly summary")
             while True:
                 index = input("Input by index (q for quit): ")

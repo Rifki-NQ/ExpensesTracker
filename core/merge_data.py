@@ -1,15 +1,9 @@
 import pandas as pd
 from .utils import read
-from .utils import salarypath
-from .utils import expensespath
-
-df_salary = read(salarypath)
-df_expenses = read(expensespath)
-#turns all dates to datetime
-df_salary["date"] = pd.to_datetime(df_salary["date"], format="%m-%Y")
-df_expenses["date"] = pd.to_datetime(df_expenses["date"], format="%d-%m-%Y")
+from .utils import salarypath, expensespath
 
 def monthly_expenses():
+    df_expenses = read(expensespath)
     if df_expenses.empty:
         return "Empty expenses data!"
     monthly_expenses = df_expenses[["date", "expense"]].copy()
@@ -23,6 +17,8 @@ def monthly_expenses():
     return monthly_expenses
 
 def monthly_expenses_and_salary():
+    df_salary = read(salarypath)
+    df_expenses = read(expensespath)
     if df_salary.empty:
         return "Empty salary data!"
     elif df_expenses.empty:
@@ -42,6 +38,7 @@ def monthly_expenses_and_salary():
     return expenses_and_salary
 
 def expenses_by_category():
+    df_expenses = read(expensespath)
     if df_expenses.empty:
         return "Empty expenses data!"
     expenses_category = df_expenses
@@ -58,10 +55,18 @@ def expenses_by_category():
     expenses_category = expenses_category.sort_values("category_percentage", ascending=False)
     expenses_category["category_percentage"] = expenses_category["category_percentage"].astype(str) + "%"
     expenses_category.reset_index(drop=True, inplace=True)
+    #add expenses percentage
+    expenses_percentage = df_expenses.groupby("category", as_index=False)["expense"].sum()
+    expenses_percentage["expenses_percentage"] = expenses_percentage["expense"] / expenses_percentage["expense"].sum() * 100
+    expenses_percentage["expenses_percentage"] = expenses_percentage["expenses_percentage"].round(1).astype("str") + "%"
+    expenses_category = pd.merge(expenses_category, expenses_percentage, on="category", how="inner")
+    expenses_category.drop(columns=["expense"], inplace=True)
     expenses_category.index = expenses_category.index + 1
     return expenses_category
 
 def yearly_summary():
+    df_salary = read(salarypath)
+    df_expenses = read(expensespath)
     if df_salary.empty:
         return "Empty salary data!"
     elif df_expenses.empty:
