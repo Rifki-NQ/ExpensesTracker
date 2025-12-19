@@ -3,33 +3,33 @@ from .utils import read
 from .utils import salarypath, expensespath
 
 #helper function for read, sort and format date of salary
-def read_salary(date_format=""):
+def read_salary(date_format="", period=""):
     df_salary = read(salarypath)
     if df_salary.empty:
-        return df_salary
+        return None
     df_salary["date"] = pd.to_datetime(df_salary["date"], format="%m-%Y")
     df_salary.sort_values("date", inplace=True)
     if date_format == "%m-%Y":
         df_salary["date"] = df_salary["date"].dt.strftime("%m-%Y")
-        return df_salary
     elif date_format == "%B %Y":
         df_salary["date"] = df_salary["date"].dt.strftime("%B %Y")
-        return df_salary
     #return actual, not formatted datetime type date
     else:
         return df_salary
+    #period of the date
+    
 
 #helper function for read, sort, choose columns and format date of expenses
 def read_expenses(date_format="", include=""):
     df_expenses = read(expensespath)
     if df_expenses.empty:
-        return df_expenses
+        return None
     df_expenses["date"] = pd.to_datetime(df_expenses["date"], format="%d-%m-%Y")
     df_expenses.sort_values("date", inplace=True)
-    if include == "date_salary":
-        df_expenses = df_expenses[["date", "salary"]]
-    elif include == "date_salary_category":
-        df_expenses = df_expenses[["date", "salary", "category"]]
+    if include == "date_expense":
+        df_expenses = df_expenses[["date", "expense"]]
+    elif include == "date_expense_category":
+        df_expenses = df_expenses[["date", "expense", "category"]]
     #format the date
     if date_format == "%d-%m-%Y":
         df_expenses["date"] = df_expenses["date"].dt.strftime("%d-%m-%Y")
@@ -41,8 +41,20 @@ def read_expenses(date_format="", include=""):
     else:
         return df_expenses
 
-def monthly_summary(include="all"):
+def monthly_summary(include="all", net_balance=False):
     df_salary = read_salary(date_format="%B %Y")
+    df_expenses = read_expenses(date_format="%B %Y", include="date_expense")
+    #check datasets availability
+    if df_salary is None and df_expenses is None:
+        return "Empty salary and expenses data!"
+    elif df_salary is None:
+        return "Empty salary data!"
+    elif df_expenses is None:
+        return "Empty expenses data!"
+    #columns = date, salary and expenses
+    if include == "all":
+        summary = df_salary.merge(df_expenses, on="date", how="left")
+    return summary
     
     
 def expenses_by_category():

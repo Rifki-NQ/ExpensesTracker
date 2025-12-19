@@ -93,7 +93,7 @@ while True:
                     print("-- error: use digits for the index!")
         #sub menu for data analyzing
         elif index == 3:
-            print("1. Show expenses by month")
+            print("1. Show monthly summary")
             print("2. Show expenses by category")
             print("3. show yearly summary")
             while True:
