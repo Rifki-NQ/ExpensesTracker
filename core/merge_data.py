@@ -2,7 +2,7 @@ import pandas as pd
 from .utils import read
 from .utils import salarypath, expensespath
 
-def monthly_expenses():
+def monthly_summary():
     df_expenses = read(expensespath)
     if df_expenses.empty:
         return "Empty expenses data!"
@@ -15,27 +15,6 @@ def monthly_expenses():
     monthly_expenses["date"] = monthly_expenses["date"].dt.strftime("%B %Y")
     monthly_expenses.index = monthly_expenses.index + 1
     return monthly_expenses
-
-def monthly_expenses_and_salary():
-    df_salary = read(salarypath)
-    df_expenses = read(expensespath)
-    if df_salary.empty:
-        return "Empty salary data!"
-    elif df_expenses.empty:
-        return "Empty expenses data!"
-    expenses = monthly_expenses()
-    salary = df_salary[["date", "salary"]].copy()
-    #format salary date
-    salary["date"] = pd.to_datetime(salary["date"], format="%m-%Y")
-    salary["date"] = salary["date"].dt.strftime("%B %Y")
-    #merge the expenses and salary
-    expenses_and_salary = expenses.merge(salary, on="date", how="left")
-    expenses_and_salary = expenses_and_salary.fillna(0)
-    #add net balance
-    expenses_and_salary["net balance"] = expenses_and_salary["salary"] - expenses_and_salary["expense"]
-    expenses_and_salary[["expense" ,"salary", "net balance"]] = expenses_and_salary[["expense" ,"salary", "net balance"]].astype("int64")
-    expenses_and_salary.index = expenses_and_salary.index + 1
-    return expenses_and_salary
 
 def expenses_by_category():
     df_expenses = read(expensespath)
