@@ -2,20 +2,26 @@ import pandas as pd
 from .utils import read
 from .utils import salarypath, expensespath
 
-def monthly_summary():
-    df_expenses = read(expensespath)
-    if df_expenses.empty:
-        return "Empty expenses data!"
-    monthly_expenses = df_expenses[["date", "expense"]].copy()
-    monthly_expenses["date"] = pd.to_datetime(monthly_expenses["date"], format="%d-%m-%Y")
-    monthly_expenses["date"] = monthly_expenses["date"].dt.to_period("M")
-    monthly_expenses = monthly_expenses.groupby("date", sort=True,as_index=False)["expense"].sum().sort_values("date")
-    #format the date then reset the index
-    monthly_expenses["date"] = monthly_expenses["date"].dt.to_timestamp()
-    monthly_expenses["date"] = monthly_expenses["date"].dt.strftime("%B %Y")
-    monthly_expenses.index = monthly_expenses.index + 1
-    return monthly_expenses
+#helper function for read, sort and format date of salary
+def read_salary(date_format=None):
+    df_salary = read(salarypath)
+    if df_salary.empty:
+        return df_salary
+    df_salary["date"] = pd.to_datetime(df_salary["date"], format="%m-%Y")
+    df_salary.sort_values("date", inplace=True)
+    if date_format == "%m-%Y":
+        df_salary["date"] = df_salary["date"].dt.strftime("%m-%Y")
+        return df_salary
+    elif date_format == "%B %Y":
+        df_salary["date"] = df_salary["date"].dt.strftime("%B %Y")
+        return df_salary
+    else:
+        return df_salary
 
+def monthly_summary(inlcude="all"):
+    df_salary = read_salary(date_format="%B %Y")
+    
+    
 def expenses_by_category():
     df_expenses = read(expensespath)
     if df_expenses.empty:
