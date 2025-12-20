@@ -2,6 +2,15 @@ import pandas as pd
 from .utils import read
 from .utils import salarypath, expensespath
 
+#helper function for getting available year of salary and expenses
+def get_available_year():
+    year_salary = read_salary(date_format="%Y", groupby="year")
+    year_expenses = read_expenses(date_format="%Y", include="date_expense", groupby="year")
+    avaible_year = pd.merge(year_salary, year_expenses, on="date", how="inner")
+    avaible_year = avaible_year["date"].rename({"date": "available_year"}).copy()
+    avaible_year.index = avaible_year.index + 1
+    return avaible_year.to_string()
+
 #helper function for read, sort and format date of salary
 def read_salary(date_format="", groupby=""):
     df_salary = read(salarypath)
@@ -73,7 +82,7 @@ def read_expenses(date_format="", include="", groupby=""):
 
 def monthly_summary(include="all", net_balance=False):
     print("Select year to summary")
-    
+    print(get_available_year())
     df_salary = read_salary(date_format="%Y", groupby="year")
     df_expenses = read_expenses(date_format="%B %Y", include="date_expense", groupby="month")
     #check datasets availability
@@ -84,9 +93,7 @@ def monthly_summary(include="all", net_balance=False):
     elif df_expenses is None:
         return "Empty expenses data!"
     #columns = date, salary and expenses
-    if include == "all":
-        summary = df_salary.merge(df_expenses, on="date", how="left")
-    return df_expenses
+    
     
     
 def expenses_by_category():
