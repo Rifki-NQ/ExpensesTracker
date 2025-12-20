@@ -9,15 +9,20 @@ def read_salary(date_format="", period=""):
         return None
     df_salary["date"] = pd.to_datetime(df_salary["date"], format="%m-%Y")
     df_salary.sort_values("date", inplace=True)
-    if date_format == "%m-%Y":
+    if date_format == "%m-%Y" and period != "yearly":
         df_salary["date"] = df_salary["date"].dt.strftime("%m-%Y")
-    elif date_format == "%B %Y":
+    elif date_format == "%B %Y" and period != "yearly":
         df_salary["date"] = df_salary["date"].dt.strftime("%B %Y")
-    #return actual, not formatted datetime type date
-    else:
+    #group date by day, month or year
+    if period == "daily":
         return df_salary
-    #period of the date
-    
+    elif period == "monthly":
+        df_salary = df_salary.groupby("date", as_index=False)["salary"].sum()
+        return df_salary
+    elif period ==  "yearly":
+        df_salary["date"] = df_salary["date"].dt.strftime("%Y")
+        df_salary = df_salary.groupby("date", as_index=False)["salary"].sum()
+        return df_salary
 
 #helper function for read, sort, choose columns and format date of expenses
 def read_expenses(date_format="", include=""):
@@ -42,7 +47,7 @@ def read_expenses(date_format="", include=""):
         return df_expenses
 
 def monthly_summary(include="all", net_balance=False):
-    df_salary = read_salary(date_format="%B %Y")
+    df_salary = read_salary(date_format="%B %Y", period="yearly")
     df_expenses = read_expenses(date_format="%B %Y", include="date_expense")
     #check datasets availability
     if df_salary is None and df_expenses is None:
@@ -54,7 +59,7 @@ def monthly_summary(include="all", net_balance=False):
     #columns = date, salary and expenses
     if include == "all":
         summary = df_salary.merge(df_expenses, on="date", how="left")
-    return summary
+    return df_salary
     
     
 def expenses_by_category():
