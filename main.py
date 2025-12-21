@@ -101,7 +101,7 @@ while True:
                 if index.isdigit():
                     index = int(index)
                     if index == 1:
-                        print(monthly_summary())
+                        print(monthly_summary(net_balance=True))
                         break
                     elif index == 2:
                         print(expenses_by_category())

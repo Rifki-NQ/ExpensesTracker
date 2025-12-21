@@ -1,90 +1,62 @@
 import pandas as pd
-from .utils import read
+from .utils import read, validate_digit
 from .utils import salarypath, expensespath
 
 #helper function for getting available year of salary and expenses
-def get_available_year():
-    year_salary = read_salary(date_format="%Y", groupby="year")
-    year_expenses = read_expenses(date_format="%Y", include="date_expense", groupby="year")
-    avaible_year = pd.merge(year_salary, year_expenses, on="date", how="inner")
-    avaible_year = avaible_year["date"].rename({"date": "available_year"}).copy()
-    avaible_year.index = avaible_year.index + 1
-    return avaible_year.to_string()
+def get_available_years():
+    year_salary = read_salary(period="Y")
+    year_expenses = read_expenses(period="Y")
+    available_year = pd.merge(year_salary, year_expenses, on="date", how="inner")
+    available_year = available_year["date"].rename({"date": "available_year"}).copy()
+    available_year.index = available_year.index + 1
+    return available_year
 
-#helper function for read, sort and format date of salary
-def read_salary(date_format="", groupby=""):
+#helper function for turning date into period then group it
+def read_salary(period=""):
     df_salary = read(salarypath)
     if df_salary.empty:
         return None
     df_salary["date"] = pd.to_datetime(df_salary["date"], format="%m-%Y")
     df_salary.sort_values("date", inplace=True)
-    if date_format == "%m-%Y":
-        df_salary["date"] = df_salary["date"].dt.strftime("%m-%Y")
-    elif date_format == "%B %Y":
-        df_salary["date"] = df_salary["date"].dt.strftime("%B %Y")
-    elif date_format == "%Y":
-        df_salary["date"] = df_salary["date"].dt.strftime("%Y")
-    else:
-        #return actual not formatted pd.datetime
-        pass
-    #group date by month or year
-    if groupby == "month" and date_format != "%Y":
-        df_salary = df_salary.groupby("date", as_index=False)["salary"].sum()
-        #sort the date
-        return df_salary
-    elif groupby ==  "year" and date_format not in ["%m-%Y", "%B %Y"]:
-        df_salary = df_salary.groupby("date", as_index=False)["salary"].sum()
-        return df_salary
-    else:
-        print("Incompatible date_format and groupby from read_salary!")
-        #return ungrouped df_salary
-        return None
+    #select period to use
+    if period == "M":
+        df_salary["date"] = df_salary["date"].dt.to_period("M")
+    elif period == "Y":
+        df_salary["date"] = df_salary["date"].dt.to_period("Y")
+    df_salary = df_salary.groupby("date", as_index=False)["salary"].sum()
+    return df_salary
 
-#helper function for read, sort, choose columns and format date of expenses
-def read_expenses(date_format="", include="", groupby=""):
+#helper function for turning date into period, group it 
+def read_expenses(period=""):
     df_expenses = read(expensespath)
     if df_expenses.empty:
         return None
     df_expenses["date"] = pd.to_datetime(df_expenses["date"], format="%d-%m-%Y")
-    #select what category to include
-    if include == "date_expense":
-        df_expenses = df_expenses[["date", "expense"]].copy()
-    elif include == "date_expense_category" and date_format == "%d-%m-%Y":
-        df_expenses = df_expenses[["date", "expense", "category"]].copy()
-    else:
-        print("Incompatible date_format and include!")
-        return None
-    #format the date
-    if date_format == "%d-%m-%Y":
-        df_expenses["date"] = df_expenses["date"].dt.strftime("%d-%m-%Y")
-    elif date_format == "%m-%Y":
-        df_expenses["date"] = df_expenses["date"].dt.strftime("%m-%Y")
-    elif date_format == "%B %Y":
-        df_expenses["date"] = df_expenses["date"].dt.strftime("%B %Y")
-    elif date_format == "%Y":
-        df_expenses["date"] = df_expenses["date"].dt.strftime("%Y")
-    else:
-        #return actual not formatted pandas datetime
-        pass
-    #group by day, month or year
-    if groupby == "day" and date_format not in ["%m-%Y", "%B %Y", "%Y"]:
-        return df_expenses
-    if groupby == "month" and date_format not in ["%d-%m-%Y", "%Y"]:
+    df_expenses.sort_values("date", inplace=True)
+    #select period to use
+    if period == "D":
+        df_expenses["date"] = df_expenses["date"].dt.to_period("D")
+    elif period == "M":
+        df_expenses["date"] = df_expenses["date"].dt.to_period("M")
         df_expenses = df_expenses.groupby("date", as_index=False)["expense"].sum()
-        return df_expenses
-    elif groupby == "year" and date_format not in ["%d-%m-%Y", "%m-%Y", "%B %Y"]:
+    elif period == "Y":
+        df_expenses["date"] = df_expenses["date"].dt.to_period("Y")
         df_expenses = df_expenses.groupby("date", as_index=False)["expense"].sum()
-        return df_expenses
-    else:
-        print("Incompatible date_format and groupby from read_expenses!")
-        #return ungrouped df_expenses
-        return None
+    return df_expenses
 
-def monthly_summary(include="all", net_balance=False):
-    print("Select year to summary")
-    print(get_available_year())
-    df_salary = read_salary(date_format="%Y", groupby="year")
-    df_expenses = read_expenses(date_format="%B %Y", include="date_expense", groupby="month")
+def monthly_summary(net_balance=False):
+    #select which year to summary
+    print("Select year to show your monthly summary")
+    available_years = get_available_years()
+    for index, year in enumerate(available_years.tolist()):
+        print(f"{index + 1}. {year}")
+    while True:
+        index = input("Select by index: ")
+        if validate_digit(index, 1, len(available_years)):
+            selected_year = int(str(available_years.tolist()[int(index) - 1]))
+            break
+    df_salary = read_salary(period="M")
+    df_expenses = read_expenses(period="M")
     #check datasets availability
     if df_salary is None and df_expenses is None:
         return "Empty salary and expenses data!"
@@ -92,8 +64,17 @@ def monthly_summary(include="all", net_balance=False):
         return "Empty salary data!"
     elif df_expenses is None:
         return "Empty expenses data!"
+    #filter by selected year
+    df_salary = df_salary[df_salary["date"].dt.year == selected_year]
+    df_expenses = df_expenses[df_expenses["date"].dt.year == selected_year]
     #columns = date, salary and expenses
-    
+    summary = pd.merge(df_salary, df_expenses, on="date", how="left")
+    summary.rename(columns={"expense": "expenses"}, inplace=True)
+    summary[["salary","expenses"]] = summary[["salary","expenses"]].fillna(0).astype(int)
+    #add net balance column (optional)
+    if net_balance:
+        summary["net_balance"] = summary["salary"] - summary["expenses"]
+    return summary
     
     
 def expenses_by_category():
