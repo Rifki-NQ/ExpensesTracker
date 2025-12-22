@@ -94,8 +94,8 @@ while True:
         #sub menu for data analyzing
         elif index == 3:
             print("1. Show monthly summary")
-            print("2. Show expenses by category")
-            print("3. show yearly summary")
+            print("2. show yearly summary")
+            print("3. Show expenses by category")
             while True:
                 index = input("Input by index (q for quit): ")
                 if index.isdigit():
@@ -104,10 +104,10 @@ while True:
                         print(monthly_summary(net_balance=True))
                         break
                     elif index == 2:
-                        print(expenses_by_category())
+                        print(yearly_summary(net_balance=True))
                         break
                     elif index == 3:
-                        print(yearly_summary())
+                        print(expenses_by_category())
                         break
                     else:
                         print("-- error: invalid index inputted!")

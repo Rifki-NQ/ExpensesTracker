@@ -76,6 +76,21 @@ def monthly_summary(net_balance=False):
         summary["net_balance"] = summary["salary"] - summary["expenses"]
     return summary
     
+def yearly_summary(net_balance=False):
+    df_salary = read_salary("Y")
+    df_expenses = read_expenses("Y")
+    #check datasets availability
+    if df_salary is None and df_expenses is None:
+        return "Empty salary and expenses data!"
+    elif df_salary is None:
+        return "Empty salary data!"
+    elif df_expenses is None:
+        return "Empty expenses data!"
+    summary = pd.merge(df_salary, df_expenses, on="date", how="outer")
+    summary.rename(columns={"salary": "yearly_salary", "expense": "yearly_expenses"}, inplace=True)
+    if net_balance:
+        summary["net_balance"] = summary["yearly_salary"] - summary["yearly_expenses"]
+    return summary
     
 def expenses_by_category():
     df_expenses = read(expensespath)
@@ -103,25 +118,3 @@ def expenses_by_category():
     expenses_category.drop(columns=["expense"], inplace=True)
     expenses_category.index = expenses_category.index + 1
     return expenses_category
-
-def yearly_summary():
-    df_salary = read(salarypath)
-    df_expenses = read(expensespath)
-    if df_salary.empty:
-        return "Empty salary data!"
-    elif df_expenses.empty:
-        return "Empty expenses data!"
-    expenses = df_expenses[["date", "expense"]].rename(columns={"date": "year", "expense": "yearly_expenses"}).copy()
-    salary = df_salary.rename(columns={"date": "year", "salary": "yearly_salary"}).copy()
-    #format date of both datasets
-    expenses["year"] = pd.to_datetime(expenses["year"], format="%d-%m-%Y")
-    salary["year"] = pd.to_datetime(salary["year"], format="%m-%Y")
-    expenses["year"] = expenses["year"].dt.strftime("%Y")
-    salary["year"] = salary["year"].dt.strftime("%Y")
-    #group by year
-    expenses = expenses.groupby("year", as_index=False)["yearly_expenses"].sum()
-    salary = salary.groupby("year", as_index=False)["yearly_salary"].sum()
-    #merge by year
-    summary = pd.merge(expenses, salary, on="year", how="outer")
-    summary.index = summary.index + 1
-    return summary
