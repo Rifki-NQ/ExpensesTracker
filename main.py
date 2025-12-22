@@ -8,9 +8,8 @@ from core.expenses import ShowExpenses
 from core.expenses import EditExpenses
 from core.expenses import DeleteExpenses
 from core.expenses import ResetExpenses
-from core.merge_data import monthly_summary
-from core.merge_data import expenses_by_category
-from core.merge_data import yearly_summary
+from core.merge_data import monthly_summary, yearly_summary
+from core.merge_data import expenses_weekly_summary, expenses_by_category
 from core.visual import monthly_salary
 
 while True:
@@ -95,7 +94,8 @@ while True:
         elif index == 3:
             print("1. Show monthly summary")
             print("2. show yearly summary")
-            print("3. Show expenses by category")
+            print("3. Show weekly expenses summary")
+            print("4. Show expenses by category")
             while True:
                 index = input("Input by index (q for quit): ")
                 if index.isdigit():
@@ -107,6 +107,9 @@ while True:
                         print(yearly_summary(net_balance=True))
                         break
                     elif index == 3:
+                        print(expenses_weekly_summary())
+                        break
+                    elif index == 4:
                         print(expenses_by_category())
                         break
                     else:

@@ -11,6 +11,20 @@ def get_available_years():
     available_year.index = available_year.index + 1
     return available_year
 
+#helper function for getting available quarter of year from salary and expenses
+def get_available_quarters(include=""):
+    salary_q = read_salary("Q")
+    expenses_q = read_expenses("Q")
+    if include == "all":
+        available_quarters = pd.merge(salary_q, expenses_q, on="date", how="inner")
+        available_quarters = available_quarters["date"]
+    elif include == "salary":
+        available_quarters = salary_q["date"]
+    elif include == "expenses":
+        available_quarters = expenses_q["date"]
+    available_quarters.index = available_quarters.index + 1
+    return available_quarters
+
 #helper function for turning date into period then group it
 def read_salary(period=""):
     df_salary = read(salarypath)
@@ -21,6 +35,8 @@ def read_salary(period=""):
     #select period to use
     if period == "M":
         df_salary["date"] = df_salary["date"].dt.to_period("M")
+    elif period == "Q":
+        df_salary["date"] = df_salary["date"].dt.to_period("Q")
     elif period == "Y":
         df_salary["date"] = df_salary["date"].dt.to_period("Y")
     df_salary = df_salary.groupby("date", as_index=False)["salary"].sum()
@@ -38,6 +54,9 @@ def read_expenses(period=""):
         df_expenses["date"] = df_expenses["date"].dt.to_period("D")
     elif period == "M":
         df_expenses["date"] = df_expenses["date"].dt.to_period("M")
+        df_expenses = df_expenses.groupby("date", as_index=False)["expense"].sum()
+    elif period == "Q":
+        df_expenses["date"] = df_expenses["date"].dt.to_period("Q")
         df_expenses = df_expenses.groupby("date", as_index=False)["expense"].sum()
     elif period == "Y":
         df_expenses["date"] = df_expenses["date"].dt.to_period("Y")
@@ -91,6 +110,17 @@ def yearly_summary(net_balance=False):
     if net_balance:
         summary["net_balance"] = summary["yearly_salary"] - summary["yearly_expenses"]
     return summary
+    
+def expenses_weekly_summary():
+    df_expenses = read_expenses("Q")
+    available_quarters = get_available_quarters(include="salary")
+    print(available_quarters.to_string())
+    while True:
+        selected_period = input("Select which period to show (by index): ")
+        if validate_digit(selected_period, 1, len(available_quarters)):
+            selected_period = str(available_quarters.tolist()[int(selected_period) - 1])
+            break
+    return
     
 def expenses_by_category():
     df_expenses = read(expensespath)
