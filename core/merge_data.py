@@ -112,15 +112,31 @@ def yearly_summary(net_balance=False):
     return summary
     
 def expenses_weekly_summary():
-    df_expenses = read_expenses("Q")
-    available_quarters = get_available_quarters(include="salary")
+    df_expenses = read_expenses()
+    available_quarters = get_available_quarters(include="expenses")
     print(available_quarters.to_string())
     while True:
         selected_period = input("Select which period to show (by index): ")
         if validate_digit(selected_period, 1, len(available_quarters)):
             selected_period = str(available_quarters.tolist()[int(selected_period) - 1])
             break
-    return
+    df_expenses["date"] = df_expenses["date"].dt.to_period("Q")
+    df_expenses = df_expenses[df_expenses["date"] == selected_period]
+    #getting expenses of the selected period
+    weekly_expenses = read_expenses()
+    weekly_expenses["date"] = weekly_expenses["date"].dt.to_period("W")
+    weekly_expenses = weekly_expenses.groupby("date", as_index=False)["expense"].sum()
+ 
+    #add weekly date
+    weekly_date = read_expenses()
+    weekly_date = weekly_date["date"].rename("weekly_date").dt.to_period("W")
+    start_of_week = weekly_date.dt.start_time.dt.strftime("%d %B")
+    end_of_week = weekly_date.dt.end_time.dt.strftime("%d %B %Y")
+    weekly_date = start_of_week + " to " + end_of_week
+    summary = weekly_expenses.join(weekly_date)
+    #raname columns and reorder them
+    
+    return summary
     
 def expenses_by_category():
     df_expenses = read(expensespath)
