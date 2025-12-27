@@ -1,4 +1,5 @@
 import pandas as pd
+from pandas.errors import EmptyDataError
 
 #variables for data files path
 salarypath = "data/salary.csv"
@@ -12,8 +13,8 @@ def read(pathname):
     #check if the file exist
     try:
         df = pd.read_csv(pathname)
-    #create new file with headers if the file does not exist
-    except FileNotFoundError:
+    #create new file with headers if the file does not exist or if the file is empty
+    except (FileNotFoundError, EmptyDataError):
         if pathname == salarypath:
             df = pd.DataFrame(columns=salary_headers)
         elif pathname == expensespath:
