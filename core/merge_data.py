@@ -64,6 +64,15 @@ def read_expenses(period=""):
     return df_expenses
 
 def monthly_summary(net_balance=False):
+    df_salary = read_salary(period="M")
+    df_expenses = read_expenses(period="M")
+    #check datasets availability
+    if df_salary is None and df_expenses is None:
+        return "Empty salary and expenses data!"
+    elif df_salary is None:
+        return "Empty salary data!"
+    elif df_expenses is None:
+        return "Empty expenses data!"
     #select which year to summary
     print("Select year to show your monthly summary")
     available_years = get_available_years()
@@ -74,15 +83,6 @@ def monthly_summary(net_balance=False):
         if validate_digit(index, 1, len(available_years)):
             selected_year = int(str(available_years.tolist()[int(index) - 1]))
             break
-    df_salary = read_salary(period="M")
-    df_expenses = read_expenses(period="M")
-    #check datasets availability
-    if df_salary is None and df_expenses is None:
-        return "Empty salary and expenses data!"
-    elif df_salary is None:
-        return "Empty salary data!"
-    elif df_expenses is None:
-        return "Empty expenses data!"
     #filter by selected year
     df_salary = df_salary[df_salary["date"].dt.year == selected_year]
     df_expenses = df_expenses[df_expenses["date"].dt.year == selected_year]
@@ -113,6 +113,8 @@ def yearly_summary(net_balance=False):
     
 def expenses_weekly_summary():
     df_expenses = read_expenses()
+    if df_expenses is None:
+        return "Empty expenses data!"
     available_quarters = get_available_quarters(include="expenses")
     print(available_quarters.to_string())
     while True:
